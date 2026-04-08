@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green-dark: #1a3a2a;
+  --green-mid: #2d6a4f;
+  --green-light: #52b788;
+  --green-pale: #d8f3dc;
+  --accent: #f4a261;
+  --accent-dark: #e76f51;
+  --cream: #faf8f2;
+}
+
+@layer base {
+  body {
+    @apply font-dm bg-cream text-green-dark;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-syne;
+  }
+}
+
+@layer components {
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors;
+  }
+  .sidebar-link-active {
+    @apply bg-green-pale text-green-mid;
+  }
+  .sidebar-link-idle {
+    @apply text-green-dark/70 hover:bg-green-pale/60 hover:text-green-mid;
+  }
+}
