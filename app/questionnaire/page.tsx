@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { calculerScoreChaleur } from '@/lib/score'
 import Button from '@/components/ui/Button'
-import Input from '@/components/ui/Input'
 import { cn } from '@/lib/utils'
 
 const QUESTIONS = [
@@ -117,28 +116,35 @@ export default function QuestionnairePage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center p-4">
-      <div className="w-full max-w-lg">
+    <div className="min-h-screen bg-[#111a14] bg-dots flex items-center justify-center p-4">
+      <div className="w-full max-w-lg fade-up">
+
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="font-syne font-bold text-3xl text-green-dark">
-            Verti<span className="text-green-mid">Call</span>
+          <div className="inline-flex items-center gap-2 bg-white/8 border border-white/10 text-white/60 text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-light animate-pulse" />
+            Analyse gratuite
+          </div>
+          <h1 className="font-syne font-extrabold text-3xl text-white">
+            Évaluez votre projet
           </h1>
-          <p className="text-gray-500 text-sm mt-1">Évaluez votre projet</p>
+          <p className="text-white/40 text-sm mt-2">
+            5 questions pour estimer la maturité de votre besoin
+          </p>
         </div>
 
         {/* Résultat */}
         {etape === QUESTIONS.length + 1 && resultat ? (
-          <div className="bg-white rounded-2xl border border-green-pale shadow-sm p-8 text-center">
+          <div className="bg-white rounded-2xl p-8 text-center shadow-xl">
             {(() => {
               const cfg = LABEL_CONFIG[resultat.label]
               return (
                 <>
                   <div className="text-5xl mb-4">{cfg.icon}</div>
-                  <div className={cn('text-sm font-bold uppercase tracking-wide mb-2', cfg.color)}>
-                    Score : {resultat.score}/100
+                  <div className={cn('text-xs font-bold uppercase tracking-widest mb-2', cfg.color)}>
+                    Score chaleur : {resultat.score}/100
                   </div>
-                  <h2 className="font-syne font-bold text-2xl text-green-dark mb-3">
+                  <h2 className="font-syne font-extrabold text-2xl text-green-dark mb-3">
                     {cfg.titre}
                   </h2>
                   <div className={cn('rounded-xl p-4 mb-6 text-sm', cfg.bg, cfg.color)}>
@@ -146,10 +152,10 @@ export default function QuestionnairePage() {
                   </div>
 
                   {/* Barre de score */}
-                  <div className="bg-gray-100 rounded-full h-3 mb-6 overflow-hidden">
+                  <div className="bg-gray-100 rounded-full h-2 mb-6 overflow-hidden">
                     <div
                       className={cn(
-                        'h-3 rounded-full transition-all',
+                        'h-2 rounded-full transition-all duration-700',
                         resultat.label === 'chaud' ? 'bg-green-mid' :
                         resultat.label === 'tiede' ? 'bg-accent' : 'bg-blue-400'
                       )}
@@ -171,53 +177,65 @@ export default function QuestionnairePage() {
           </div>
         ) : etape === QUESTIONS.length ? (
           /* Étape contact */
-          <div className="bg-white rounded-2xl border border-green-pale shadow-sm p-8">
-            <h2 className="font-syne font-bold text-xl text-green-dark mb-2">
+          <div className="bg-white rounded-2xl p-8 shadow-xl">
+            <h2 className="font-syne font-extrabold text-xl text-green-dark mb-1">
               Presque terminé !
             </h2>
-            <p className="text-gray-500 text-sm mb-6">
+            <p className="text-gray-400 text-sm mb-6">
               Laissez vos coordonnées pour recevoir votre analyse personnalisée.
             </p>
             <form onSubmit={soumettre} className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-3">
-                <Input
-                  id="prenom"
-                  label="Prénom"
-                  placeholder="Marie"
-                  value={contact.prenom}
-                  onChange={(e) => setContact((c) => ({ ...c, prenom: e.target.value }))}
-                />
-                <Input
-                  id="commune"
-                  label="Commune"
-                  placeholder="Lyon"
-                  value={contact.commune}
-                  onChange={(e) => setContact((c) => ({ ...c, commune: e.target.value }))}
+                <div>
+                  <label className="section-label" htmlFor="prenom">Prénom</label>
+                  <input
+                    id="prenom"
+                    className="input-base"
+                    placeholder="Marie"
+                    value={contact.prenom}
+                    onChange={(e) => setContact((c) => ({ ...c, prenom: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="section-label" htmlFor="commune">Commune</label>
+                  <input
+                    id="commune"
+                    className="input-base"
+                    placeholder="Lyon"
+                    value={contact.commune}
+                    onChange={(e) => setContact((c) => ({ ...c, commune: e.target.value }))}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="section-label" htmlFor="email">Email (optionnel)</label>
+                <input
+                  id="email"
+                  type="email"
+                  className="input-base"
+                  placeholder="contact@mairie.fr"
+                  value={contact.email}
+                  onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}
                 />
               </div>
-              <Input
-                id="email"
-                label="Email (optionnel)"
-                type="email"
-                placeholder="contact@mairie.fr"
-                value={contact.email}
-                onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}
-              />
-              <Input
-                id="telephone"
-                label="Téléphone (optionnel)"
-                type="tel"
-                placeholder="0600000000"
-                value={contact.telephone}
-                onChange={(e) => setContact((c) => ({ ...c, telephone: e.target.value }))}
-              />
-              <Button type="submit" size="lg" className="mt-2">
+              <div>
+                <label className="section-label" htmlFor="telephone">Téléphone (optionnel)</label>
+                <input
+                  id="telephone"
+                  type="tel"
+                  className="input-base"
+                  placeholder="0600000000"
+                  value={contact.telephone}
+                  onChange={(e) => setContact((c) => ({ ...c, telephone: e.target.value }))}
+                />
+              </div>
+              <Button type="submit" size="lg" className="mt-2 w-full">
                 Voir mon analyse →
               </Button>
               <button
                 type="button"
                 onClick={soumettre}
-                className="text-sm text-gray-400 hover:text-gray-600 text-center"
+                className="text-sm text-gray-400 hover:text-gray-600 text-center transition-colors"
               >
                 Passer cette étape
               </button>
@@ -225,35 +243,35 @@ export default function QuestionnairePage() {
           </div>
         ) : (
           /* Questions */
-          <div className="bg-white rounded-2xl border border-green-pale shadow-sm p-8">
+          <div className="bg-white rounded-2xl p-8 shadow-xl">
             {/* Progress */}
-            <div className="mb-6">
+            <div className="mb-7">
               <div className="flex justify-between text-xs text-gray-400 mb-2">
-                <span>Question {etape + 1} / {QUESTIONS.length}</span>
+                <span className="font-medium">Question {etape + 1} / {QUESTIONS.length}</span>
                 <span>{Math.round(progress)}%</span>
               </div>
-              <div className="bg-gray-100 rounded-full h-1.5">
+              <div className="bg-gray-100 rounded-full h-1">
                 <div
-                  className="bg-green-mid h-1.5 rounded-full transition-all"
+                  className="bg-green-mid h-1 rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
 
-            <h2 className="font-syne font-bold text-xl text-green-dark mb-6">
+            <h2 className="font-syne font-extrabold text-xl text-green-dark mb-6">
               {question.question}
             </h2>
 
-            <div className="flex flex-col gap-3 mb-6">
+            <div className="flex flex-col gap-2.5 mb-7">
               {question.options.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => selectReponse(opt.value)}
                   className={cn(
-                    'text-left px-4 py-3 rounded-xl border-2 text-sm transition-all',
+                    'text-left px-4 py-3.5 rounded-xl border-2 text-sm transition-all',
                     reponses[question.id] === opt.value
-                      ? 'border-green-mid bg-green-pale text-green-dark font-medium'
-                      : 'border-gray-200 hover:border-green-light/50 text-gray-700'
+                      ? 'border-green-mid bg-green-pale text-green-dark font-semibold'
+                      : 'border-gray-100 hover:border-green-light/50 hover:bg-gray-50 text-gray-600'
                   )}
                 >
                   {opt.label}
@@ -267,7 +285,7 @@ export default function QuestionnairePage() {
               className="w-full"
               size="lg"
             >
-              {etape === QUESTIONS.length - 1 ? 'Voir mes coordonnées →' : 'Question suivante →'}
+              {etape === QUESTIONS.length - 1 ? 'Dernière étape →' : 'Question suivante →'}
             </Button>
           </div>
         )}
